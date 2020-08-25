@@ -34,21 +34,21 @@ pub fn search(range: Range<f64>, fibs: Fibs, n: usize, f: impl Fn(f64) -> f64) -
     let Range{ mut start, mut end } = range;
     let mut x1 = start + (end - start) * fibs[n] / fibs[n + 2];
     let mut x2 = start + (end - start) * fibs[n + 1] / fibs[n + 2];
-    let mut f1 = f(x1);
-    let mut f2 = f(x2);
+    let mut fx1 = f(x1);
+    let mut fx2 = f(x2);
     for n in (1..n).rev() {
-        if f1 < f2 {
+        if fx1 < fx2 {
             end = x2;
             x2 = x1;
-            f2 = f1;
+            fx2 = fx1;
             x1 = start + (end - start) * fibs[n] / fibs[n + 2];
-            f1 = f(x1);
+            fx1 = f(x1);
         } else {
             start = x1;
             x1 = x2;
-            f1 = f2;
+            fx1 = fx2;
             x2 = start + (end - start) * fibs[n + 1] / fibs[n + 2];
-            f2 = f(x2);
+            fx2 = f(x2);
         }
     }
 
