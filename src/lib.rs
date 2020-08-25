@@ -56,6 +56,7 @@ pub fn search(range: Range<f64>, fibs: Fibs, n: usize, f: impl Fn(f64) -> f64) -
 }
 
 pub fn epsilon_to_n(range: Range<f64>, eps: f64) -> usize {
+    assert!(eps > 0.0);
     ((5.0f64.sqrt() * (range.end - range.start) / eps).ln() 
      / ((1.0 + 5.0f64.sqrt()) / 2.0).ln() 
      - 1.0) as usize
