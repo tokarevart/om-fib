@@ -5,6 +5,8 @@ pub struct Fibs(Vec<f64>);
 
 impl Fibs {
     pub fn new(to_n: usize) -> Self {
+        assert!(to_n > 0);
+
         let mut vec: Vec<usize> = Vec::with_capacity(to_n + 1);
         vec.extend_from_slice(&[1, 1]);
         for _ in 1..to_n {
@@ -27,7 +29,15 @@ impl Index<usize> for Fibs {
     }
 }
 
-pub fn search(range: Range<f64>, fibs: Fibs, n: usize, f: impl Fn(f64) -> f64) -> f64 {
+pub fn search(range: Range<f64>, eps: f64, f: impl Fn(f64) -> f64) -> f64 {
+    assert!(eps > 0.0);
+
+    let n = epsilon_to_n(range.clone(), eps);
+    let fibs = Fibs::new(n + 2);
+    search_with_n(range, fibs, n, f)
+}
+
+pub fn search_with_n(range: Range<f64>, fibs: Fibs, n: usize, f: impl Fn(f64) -> f64) -> f64 {
     assert!(n > 0);
     assert!(fibs.max_n() >= n + 2);
 
@@ -57,6 +67,7 @@ pub fn search(range: Range<f64>, fibs: Fibs, n: usize, f: impl Fn(f64) -> f64) -
 
 pub fn epsilon_to_n(range: Range<f64>, eps: f64) -> usize {
     assert!(eps > 0.0);
+
     ((5.0f64.sqrt() * (range.end - range.start) / eps).ln() 
      / ((1.0 + 5.0f64.sqrt()) / 2.0).ln() 
      - 1.0) as usize
